@@ -19,36 +19,42 @@ file_object = client.files.create(
     file=open(filepath, "rb"), purpose="assistants")
 
 # Step 2 - Create an assistant
-assistant = client.beta.assistants.create(
-    name="Studdy Buddy",
-    instructions="""You are a helpful study assistant who knows a lot about understanding research papers.
-    Your role is to summarize papers, clarify terminology within context, and extract key figures and data.
-    Cross-reference information for additional insights and answer related questions comprehensively.
-    Analyze the papers, noting strengths and limitations.
-    Respond to queries effectively, incorporating feedback to enhance your accuracy.
-    Handle data securely and update your knowledge base with the latest research.
-    Adhere to ethical standards, respect intellectual property, and provide users with guidance on any limitations.
-    Maintain a feedback loop for continuous improvement and user support.
-    Your ultimate goal is to facilitate a deeper understanding of complex scientific material, making it more accessible and comprehensible.""",
-    tools=[{"type": "retrieval"}],
-    model=model,
-    file_ids=[file_object.id],
-)
+# assistant = client.beta.assistants.create(
+#     name="Studdy Buddy",
+#     instructions="""You are a helpful study assistant who knows a lot about understanding research papers.
+#     Your role is to summarize papers, clarify terminology within context, and extract key figures and data.
+#     Cross-reference information for additional insights and answer related questions comprehensively.
+#     Analyze the papers, noting strengths and limitations.
+#     Respond to queries effectively, incorporating feedback to enhance your accuracy.
+#     Handle data securely and update your knowledge base with the latest research.
+#     Adhere to ethical standards, respect intellectual property, and provide users with guidance on any limitations.
+#     Maintain a feedback loop for continuous improvement and user support.
+#     Your ultimate goal is to facilitate a deeper understanding of complex scientific material, making it more accessible and comprehensible.""",
+#     tools=[{"type": "retrieval"}],
+#     model=model,
+#     file_ids=[file_object.id],
+# )
 
 # === Get the Assis ID ===
-assis_id = assistant.id
-print(assis_id)
+# assis_id = assistant.id
+# print(assis_id)
 
 # === Step 3. Create a thread
 message = "What is mining?"
 
-thread = client.beta.threads.create()
-thread_id=thread.id
-print(thread_id)
+# thread = client.beta.threads.create()
+# thread_id=thread.id
+# print(thread_id)
 
 # == Hardcoded ids to be used once the first code run is done and the assistant was created
 thread_id = os.environ.get("OPENAI_THREAD_ID")
 assis_id = os.environ.get("OPENAI_ASSISTANT_ID")
+
+message = client.beta.threads.messages.create(
+    thread_id=thread_id,
+    role="user",
+    content=message
+)
 
 # === Run the Assistant ===
 run = client.beta.threads.runs.create(
